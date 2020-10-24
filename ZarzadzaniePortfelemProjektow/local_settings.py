@@ -3,7 +3,7 @@ MEDIA_ROOT = "/home/hiro/zarzadzanie/media"
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-ALLOWED_HOSTS = ["uek.krakow.pl","149.156.208.22","127.0.0.1",]
+ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
