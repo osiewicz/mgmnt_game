@@ -10,3 +10,6 @@ pytz==2019.3
 scipy==1.4.1
 six==1.13.0
 sqlparse==0.3.0
+whitenoise==5.2.0
+gunicorn==20.0.4
+django-heroku==0.3.1
