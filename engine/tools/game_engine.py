@@ -389,13 +389,16 @@ class WalletMapAnalysis(object):
 
     def plot(self, projects_list):
         risks, profits = self.generate_data()
+        risks.sort(reverse=True)
+        profits.sort(reverse=True)
         one_risk = self.runda.oszacuj_ryzyko(projects_list)
         one_profit = self.sum_profits(projects_list)
 
         plt.switch_backend('Agg')
         fig, ax = plt.subplots(figsize=(7, 6))
 
-        ax.scatter(risks, profits,  edgecolor='k', facecolors = 'y', alpha=0.7, s = 50, lw =1)
+        ax.scatter(risks[:3], profits[:3],  edgecolor='k', facecolors = 'g', alpha=0.7, s = 50, lw =1)
+        ax.scatter(risks[3:], profits[3:],  edgecolor='k', facecolors = 'y', alpha=0.7, s = 50, lw =1)
         ax.scatter([one_risk], [one_profit],  edgecolor='k', facecolors = 'r', alpha=0.7, s = 50, lw =1)
 
         plt.rc('grid', linestyle="--", lw=0.3, color='black')
@@ -413,5 +416,7 @@ class WalletMapAnalysis(object):
         plt.xticks(x_ticks)
         ax.xaxis.set_minor_locator(ticker.MultipleLocator(step/10))
         plt.xlabel("ryzyko portfela")
+
+        plt.legend(["Najlepsze portfele","Pozostałe portfele", "Twój portfel"])
 
         return plt
