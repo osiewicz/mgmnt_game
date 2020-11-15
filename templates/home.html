@@ -2,13 +2,70 @@
 
 {% load pages_content %}
 
+{% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
     <h1>Zarządzanie portfelem projektów</h1><hr>
 
 <div class="app">
-    {{ 'homepage-content'|html_content }}
+  <h2>Informacje o grze:</h2>
+  <br />
+  <h3>Cel rozgrywki:</h3>
+  <p>
+    Celem gry jest maksymalizacja zwrotu z portfela projektów. Zwrot jest
+    rozumiany jako stosunek zysków do kosztów.
+  </p>
+  <h3>Przebieg rozgrywki:</h3>
+  <p>
+    Gra składa się z rund. W każdej rundzie generowane są losowo dane na temat
+    dziewięciu projektów. Zadaniem gracza jest wybór takich trzech spośród
+    dziewięciu podanych projektów, które jego zdaniem przyniosą największe
+    zyski. Wybrane w ten sposób projekty łącznie tworzą portfel.
+  </p>
+  <p>
+    Po zatwierdzeniu portfela generowane są losowo rzeczywiste zyski projektów.
+    Losowanie odbywa się zgodnie z podanymi na wykresach rozkładami
+    prawdopodobieństwa realizacji przychodów dla poszczególnych projektów.
+  </p>
+  <h3>Interfejs i obsługa gry:</h3>
+  <p>
+    Po rozpoczęciu rozgrywki na ekranie widoczna jest tabela projektów. 
+    Znajdują się w niej podstawowe dane dotyczące każdego z projektów: koszt, zysk, zwrot oraz ryzyko.
+  </p>
+  <div style="max-width: fit-content;">
+    <b style="text-align: center; display: block;">Tabela projektów:</b>
+    <img src="{% static "img/tabela-tutorial.jpg" %}" alt="Tabela projektów">
+  </div>
+  <p>
+    Podgląd wykresu danego projektu jest możliwy po kliknięciu odpowiadającego mu przycisku (1 kolumna). 
+    Wykres wraz z legendą pojawi się po prawej stronie tabeli. 
+  </p>
+  <div style="max-width: fit-content;">
+    <b style="text-align: center; display: block;">Wykres projektu:</b>
+    <img src="{% static "img/wykres-projektu-tutorial.jpg" %}" alt="Wykres projektu">
+  </div>
+  <p>
+    Z wygenerowanego w ten sposób wykresu można odczytać jak rozkłada się prawdopodobieństwo 
+    zysków dla tego projektu. Intensywnie czerwony kolor oznacza straty, podczas gdy najbardziej blady odcień - zysk. 
+    Im węższy staje się przedstawiony na wykresie rozkład, tym lepiej - rośnie bowiem prawdopodobieństwo, 
+    że otrzymamy środkową, a więc najwyższą wartość zysku.
+  </p>
+  <p>
+    Zaznaczenie co najmniej jednego z projektów spowoduje pojawienie się podsumowania portfela poniżej tabeli projektów. 
+    Przed zatwierdzeniem portfela (przycisk Generuj zyski!) gracz może też zobaczyć wykres funkcji zysków
+    wszystkich portfeli względem ryzyka (przycisk Mapa). Obydwa przyciki uaktywniaja się wyłącznie, w sytuacji w której gracz 
+    wybrał dokładnie 3 projekty w portfelu.
+  </p>
+  <div style="max-width: fit-content;">
+    <b style="text-align: center; display: block;">Wykres funkcji zysków wszystkich portfeli względem ryzyka:</b>
+    <img src="{% static "img/mapa-tutorial.jpg" %}" alt="Mapa">
+  </div>
+  <p>
+    Wybrany przez gracza portfel jest oznaczony na wykresie kolorem czerwonym. Najlepsze portfel, czyli takie, które mogą 
+    przynieść najwyższe zyski oznaczone są kolorem zielonym. Pozostałe możliwe portfele oznaczone są kolorem żółtym.
+  </p>
 </div>
 
 {% endblock %}
