@@ -9,6 +9,15 @@
 
 <div class="app">
     {{ 'homepage-content'|html_content }}
+    <div style="text-align: center">
+        <button
+          class="btn btn-success"
+          style="width: 300px; font-size: 28px; font-weight: bold"
+          onclick="location='/game'"
+        >
+          Przejdz do gry
+        </button>
+      </div>
 </div>
 
 {% endblock %}
