@@ -17,15 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 
-from pages.views import GameView, ResultsView, export_view
+#from pages.views import export_view
+from pages_.views import GameView, ResultsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('export.csv', export_view, name="export_to_csv"),
+    #path('export.csv', export_view, name="export_to_csv"),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('game/', GameView.as_view(), name='game-main'),
     path('results/', ResultsView.as_view(), name='game-results'),
-    path('api/', include('engine.urls')),
+    path('api/', include('engine_refactored.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

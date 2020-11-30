@@ -5,6 +5,8 @@ import sys
 
 
 def main():
+    current_dir = os.path.dirname(sys.argv[0])
+    sys.path.insert(0, current_dir)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ZarzadzaniePortfelemProjektow.settings')
     try:
         from django.core.management import execute_from_command_line

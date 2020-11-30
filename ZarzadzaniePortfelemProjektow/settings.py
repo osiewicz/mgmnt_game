@@ -50,9 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'redactor',
     'accounts.apps.AccountsConfig',
-    'engine',
-    'pages',
-    'process',
+    'engine_refactored',
+    'pages_'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
