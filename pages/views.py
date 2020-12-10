@@ -4,7 +4,6 @@ from django.shortcuts import render
 
 from engine.models import CompleteGame, Game
 from engine import engine
-import engine
 
 from json import dumps
 

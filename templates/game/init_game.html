@@ -1,4 +1,5 @@
 {% load custom_tags %}
+{% load pages_content %}
 <form id="form_round" class="form-horizontal" method="post" onsubmit="game_request_timeout(event, 'form_round', '{% url 'api-submit-round' %}')">
     <input type="hidden" name="gameId" value="{{ game_id }}">
     <input type="hidden" name="roundId" value="{{ round_id }}">
@@ -32,7 +33,7 @@
                 {{ itr.1 }}
             </td>
             <td>
-                {% divide itr.1 itr.0 %}
+                {{ itr.1|divide:itr.0 }}
             </td>
             <td>
                 {{ itr.2 }}
