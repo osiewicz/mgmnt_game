@@ -1,12 +1,60 @@
-{% load api_filters %}
-
+{% load custom_tags %}
 <form id="form_round" class="form-horizontal" method="post" onsubmit="game_request_timeout(event, 'form_round', '{% url 'api-submit-round' %}')">
     <input type="hidden" name="gameId" value="{{ game_id }}">
     <input type="hidden" name="roundId" value="{{ round_id }}">
     <input type="hidden" name="roundSeed" value="{{ round.seed }}">
     <input type="hidden" name="stepId" value="{{ step_id }}">
     {% csrf_token %}
-    {% game_table round_data round_iterator %}
+{# <textarea onclick="this.focus();this.select()" style="width: 100%;"> {% filter force_escape %} {% debug %} {% endfilter %} </textarea> #}
+<p>xD{{ game_id }}</p>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>&nbsp;</th>
+        <th>Koszt</th>
+        <th>Zysk</th>
+        <th>Zwrot</th>
+        <th>Ryzyko</th>
+        <th>&nbsp;</th>
+        <th>Wynik</th>
+    </tr>
+	<!-- {{ available_options }} -->
+	<!-- {{ available_options|length }} -->
+    {% for itr in available_options %}
+        <tr>
+            <td >
+                <button class="btn-light" >Projekt{{ itr }}</button>
+            </td>
+            <td>
+	    {# https://stackoverflow.com/questions/1700661/how-to-access-array-elements-in-a-django-template #}
+                {{ itr.0 }}
+            </td>
+            <td id="expectedResults">
+                {{ itr.1 }}
+            </td>
+            <td>
+                {% divide itr.1 itr.0 %}
+            </td>
+            <td>
+                {{ itr.2 }}
+            </td>
+            <td>
+               {% comment %} <!---<label>
+                    <input type="checkbox"
+                            onchange="check_project_amount({{ round_data.k }}, {{ round_data.m }})"
+                            name="fields[]" id="{{ forloop.counter0 }}"
+                            value={{ forloop.counter0 }}{% if checkboxes %}{{ checkboxes|get_at_index:forloop.counter0 }}{% endif %}>
+                    P{{ forloop.counter }}
+                </label>--> {% endcomment %}xd
+            </td>
+            <td id="realResults">
+                {% comment %}<!--{% if results %}
+                    {{ results|get_at_index:forloop.counter0 }}
+                {% else %} --- {% endif %}--> {% endcomment %}---
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
     <div id="risk" style="margin-bottom: 15px;"></div>
     <input id="generate_revenue" class="btn btn-success" disabled type="submit" value="Generuj zyski!">
 </form>

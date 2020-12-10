@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 
-from pages_ import *
+from pages import views
 
 urlpatterns = [
     path('init/', views.InitGame.as_view(), name='api-init-game'),

@@ -10,3 +10,11 @@ def html_content(keyword):
         return hc[0].content
 
     return keyword
+
+@register.filter(is_safe=True)
+def divide(value, arg):
+    try:
+        return float(value) / float(arg)
+    except (ValueError, ZeroDivisionError):
+        return 0.0
+

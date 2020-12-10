@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.views.generic.base import TemplateView
 
 #from pages.views import export_view
-from pages_.views import GameView, ResultsView
+from pages.views import GameView, ResultsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +27,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('game/', GameView.as_view(), name='game-main'),
     path('results/', ResultsView.as_view(), name='game-results'),
-    path('api/', include('engine_refactored.urls')),
+    path('api/', include('engine.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'redactor',
     'accounts.apps.AccountsConfig',
-    'engine_refactored',
-    'pages_'
+    'engine',
+    'pages'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -83,6 +83,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'custom_tags': 'pages.templatetags.pages_content'
+            }
         },
     },
 ]

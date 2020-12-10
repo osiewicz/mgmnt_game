@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.views.generic import TemplateView
+from django.shortcuts import render
 
-from engine_refactored.models import CompleteGame
-from engine_refactored import engine
+from engine.models import CompleteGame, Game
+from engine import engine
+import engine
 
 from json import dumps
 
@@ -45,38 +47,9 @@ class ResultsView(TemplateView):
         serialized = list(map(convert_round_to_dictionary, r))
             
         return serialized
-#TODO: remove
-class PostTemplateView(TemplateView):
 
-    def get(self, request, *args, **kwargs):
-        return HttpResponseBadRequest('Bad GET request!')
 
-    def post(self, request, *args, **kwargs):
-        self.map_variables(request)
-
-        context = self.get_context_data()
-        rendered = self.render_to_response(context)
-        return rendered
-
-    def map_variables(self, request):
-        p = dict(request.POST)
-
-        prohibited_keys = []
-        if hasattr(self, 'checkbox_name'):
-            prohibited_keys.append(self.checkbox_name)
-        if hasattr(self, 'projects_list'):
-            prohibited_keys.append(self.projects_list)
-
-        for key in p.keys():
-            if type(p[key]) is list:
-                if key in prohibited_keys:
-                    continue
-                p[key] = p[key][0]
-
-        self.post = p
-        return p
-
-class InitGame(PostTemplateView):
+class InitGame(TemplateView):
     # this class creates game object and round 1
     template_name = "game/init_game.html"
 
@@ -84,18 +57,24 @@ class InitGame(PostTemplateView):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
-            g = Game(self.request.user)
+            g = Game()
+            g.user = self.request.user
             g.save()
-
-            options = engine_refactored.game_to_projects(g.id)
+            assert(g.id is not None)
+            options = engine.game_to_projects(g.id)
+            assert(len(options) > 0)
             context['game_id'] = g.id
-            context['options'] = dumps(options)
+            context['available_options'] = options
             context['image'] = bytes()
 
-            return context
+        return context
+
+    def post(self, request, *args, **kwargs):
+        c = self.get_context_data(*args, **kwargs)
+        return render(request, InitGame.template_name, context=c)
 
 
-class RoundSubmit(PostTemplateView):
+class RoundSubmit(TemplateView):
     # this class is finishing the round
     template_name = "game/submit_round.html"
 
@@ -124,5 +103,9 @@ class RoundSubmit(PostTemplateView):
         project_ratings = engine.projects_to_ratings(projects, item.id)
         
         return context
+
+    def post(self, request, *args, **kwargs):
+        c = self.get_context_data(*args, **kwargs)
+        return render(request, RoundSubmit.template_name, context=c)
 
 
