@@ -1,62 +1,99 @@
 {% load custom_tags %}
 {% load pages_content %}
-<form id="form_round" class="form-horizontal" method="post" onsubmit="game_request_timeout(event, 'form_round', '{% url 'api-submit-round' %}')">
-    <input type="hidden" name="gameId" value="{{ game_id }}">
-    <input type="hidden" name="roundId" value="{{ round_id }}">
-    <input type="hidden" name="roundSeed" value="{{ round.seed }}">
-    <input type="hidden" name="stepId" value="{{ step_id }}">
-    {% csrf_token %}
-{# <textarea onclick="this.focus();this.select()" style="width: 100%;"> {% filter force_escape %} {% debug %} {% endfilter %} </textarea> #}
-<p>xD{{ game_id }}</p>
-<table class="table table-bordered table-striped">
-    <tr>
-        <th>&nbsp;</th>
-        <th>Koszt</th>
-        <th>Zysk</th>
-        <th>Zwrot</th>
-        <th>Ryzyko</th>
-        <th>&nbsp;</th>
-        <th>Wynik</th>
-    </tr>
-	<!-- {{ available_options }} -->
-	<!-- {{ available_options|length }} -->
-    {% for itr in available_options %}
-        <tr>
-            <td >
-                <button class="btn-light" >Projekt{{ itr }}</button>
-            </td>
-            <td>
-	    {# https://stackoverflow.com/questions/1700661/how-to-access-array-elements-in-a-django-template #}
-                {{ itr.0 }}
-            </td>
-            <td id="expectedResults">
-                {{ itr.1 }}
-            </td>
-            <td>
-                {{ itr.1|divide:itr.0 }}
-            </td>
-            <td>
-                {{ itr.2 }}
-            </td>
-            <td>
-               {% comment %} <!---<label>
-                    <input type="checkbox"
-                            onchange="check_project_amount({{ round_data.k }}, {{ round_data.m }})"
-                            name="fields[]" id="{{ forloop.counter0 }}"
-                            value={{ forloop.counter0 }}{% if checkboxes %}{{ checkboxes|get_at_index:forloop.counter0 }}{% endif %}>
-                    P{{ forloop.counter }}
-                </label>--> {% endcomment %}xd
-            </td>
-            <td id="realResults">
-                {% comment %}<!--{% if results %}
-                    {{ results|get_at_index:forloop.counter0 }}
-                {% else %} --- {% endif %}--> {% endcomment %}---
-            </td>
-        </tr>
-    {% endfor %}
+<form id="form_round" class="form-horizontal" method="post" onsubmit="submitInput(event, {{ game_id }})">
+{% csrf_token %}
+<div>
+<table class="table table-bordered table-striped" style="float: left">
+<tr>
+<th>&nbsp;</th>
+<th>Koszt</th>
+<th>Zysk</th>
+<th>Zwrot</th>
+<th>Ryzyko</th>
+<th>&nbsp;</th>
+<th>Wynik</th>
+</tr>
+{% for itr, image in available_options %}
+<tr>
+<td >
+<button class="btn-light" onclick="updateDisplay('{{ image }}')">{{ forloop.counter0 }}</button>
+</td>
+<td>
+{# https://stackoverflow.com/questions/1700661/how-to-access-array-elements-in-a-django-template #}
+{{ itr.0 }}
+</td>
+<td id="expectedResults">
+{{ itr.1 }}
+</td>
+<td>
+{{ itr.1|divide:itr.0 }}
+</td>
+<td>
+{{ itr.2 }}
+</td>
+<td>
+<input type="checkbox"
+name="project{{ forloop.counter }}isSelected" id="project{{ forloop.counter0 }}isSelected" value="{{ forloop.counter0 }}" onclick="maybeToggleProjectButtons(event)">
+</td>
+<td id="realResults">
+{% comment %}<!--{% if results %}
+{{ results|get_at_index:forloop.counter0 }}
+{% else %} --- {% endif %}--> {% endcomment %}---
+</td>
+</tr>
+{% endfor %}
 </table>
+<img id="displayProjectProperties" style="float: right;"/>
+</div>
 
-    <div id="risk" style="margin-bottom: 15px;"></div>
-    <input id="generate_revenue" class="btn btn-success" disabled type="submit" value="Generuj zyski!">
+<input id="generate_revenue" class="btn btn-success" disabled type="submit" value="Generuj zyski!">
 </form>
 <!--<button id="map" onclick="show_map(event)" disabled class="btn btn-warning">Mapa</button>-->
+<script>
+function countToggledProjects() {
+	toggled = 0;
+	for (var i = 0; i < {{ available_options|length }}; ++i) {
+		toggle = document.getElementById(`project${i}isSelected`);
+		toggle.disabled = false;
+		if (toggle.checked) {
+			++toggled;
+		}
+	}
+
+	return toggled;
+}
+
+function maybeToggleProjectButtons(e) {
+	// Count toggled elements
+	toggledProjects = countToggledProjects();
+	if (toggledProjects < {{ allowed_choice_count }}) {
+		// We don't need to disable anything as len(chosen_items) < MAX_CHOSEN_ITEMS
+		// Disable "send" button as not enough projects are selected.
+		document.getElementById('generate_revenue').disabled = true;
+		return;
+	}
+
+	for (var i = 0; i < {{ available_options|length }}; ++i) {
+		toggle = document.getElementById(`project${i}isSelected`);
+		if (!toggle.checked) {
+			toggle.disabled = true;
+		}
+	}
+	if (toggledProjects === {{ allowed_choice_count }}) {
+		document.getElementById('generate_revenue').disabled = false;
+	}
+
+}
+
+function submitInput(e, id) {
+	console.log(id);
+	e.preventDefault();
+}
+
+function updateDisplay(data) {
+      disp = document.getElementById("displayProjectProperties");
+      disp.visibility = disp.visibility === "visible"? "hidden": "visible";
+      disp.src = "data:image/png;base64, " + data
+
+}
+</script>

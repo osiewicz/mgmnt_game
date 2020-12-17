@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.shortcuts import render
-
+from django.conf import settings
 from engine.models import CompleteGame, Game
 from engine import engine
 
@@ -63,8 +63,8 @@ class InitGame(TemplateView):
             options = engine.game_to_projects(g.id)
             assert(len(options) > 0)
             context['game_id'] = g.id
-            context['available_options'] = options
-            context['image'] = bytes()
+            context['available_options'] = [(option, "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==") for option in options]
+            context['allowed_choice_count'] = settings.WALLET_SIZE
 
         return context
 
